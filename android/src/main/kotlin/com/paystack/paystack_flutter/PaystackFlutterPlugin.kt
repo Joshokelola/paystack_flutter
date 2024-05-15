@@ -48,7 +48,7 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "paystack_flutter")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "com.paystack.flutter")
     channel.setMethodCallHandler(this)
   }
 

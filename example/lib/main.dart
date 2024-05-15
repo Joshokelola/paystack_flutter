@@ -3,6 +3,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:paystack_flutter/paystack_flutter.dart';
+import 'package:paystack_flutter/paystack.dart';
+import 'package:paystack_flutter/payment_sheet.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,12 +19,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  final _paymentSheet = PaymentSheet();
   final _paystackFlutterPlugin = PaystackFlutter();
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+
+    Paystack()
+      .setPublicKey("pk_test_xxxx")
+      .enableLogging(true)
+      .build();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -31,8 +39,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _paystackFlutterPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _paystackFlutterPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -47,17 +55,39 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> launchPaystack() async {
+    String response;
+    try {
+      response =
+          await _paymentSheet.launch("8lqj4xec1qt96t1") ?? "Cannot launch";
+    } on PlatformException {
+      response = 'Failed to launch SDK.';
+    }
+
+    print(response);
+  }
+
+  // void _triggerMethodChannel() {
+  //   launchPaystack();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
-      ),
+          appBar: AppBar(
+            title: const Text('Paystack Flutter'),
+          ),
+          body: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: launchPaystack,
+                  child: const Text('Make Payment')),
+              const SizedBox(width: 16),
+              Text('Running on: $_platformVersion\n'),
+            ],
+          )),
     );
   }
 }

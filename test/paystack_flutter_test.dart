@@ -10,6 +10,18 @@ class MockPaystackFlutterPlatform
 
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+  
+  @override
+  Future<String?> build(String publicKey, bool enableLogging) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<String?> launch(String accessCode) {
+    // TODO: implement launch
+    throw UnimplementedError();
+  }
 }
 
 void main() {
