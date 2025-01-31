@@ -1,28 +1,14 @@
-import 'package:flutter/foundation.dart';
-
 import 'paystack_flutter_platform_interface.dart';
 
+// TODO: Handle responses
+// TODO: Consider exposing with builder pattern
 class Paystack {
-  String _publicKey = "";
-  bool _logging = false;
 
-  Paystack setPublicKey(String publicKey) {
-    _publicKey = publicKey;
-    return this;
+  Future<String?> initialize(String publicKey, bool enableLogging) {
+    return PaystackFlutterPlatform.instance.initialize(publicKey, enableLogging);
   }
 
-  Paystack enableLogging(bool logging) {
-    _logging = logging;
-    return this;
-  }
-
-  Paystack build() {
-    _buildInternal(_publicKey, _logging);
-    return this;
-  }
-
-  @protected
-  Future<String?> _buildInternal(String publicKey, bool enableLogging) {
-    return PaystackFlutterPlatform.instance.build(publicKey, enableLogging);
+  Future<String?> launch(String accessCode) {
+    return PaystackFlutterPlatform.instance.launch(accessCode);
   }
 }

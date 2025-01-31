@@ -14,11 +14,7 @@ abstract class PaystackFlutterPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
-  Future<String?> build(String publicKey, bool enableLogging) {
+  Future<String?> initialize(String publicKey, bool enableLogging) {
     throw UnimplementedError('build() has not been implemented');
   }
 

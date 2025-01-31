@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:paystack_flutter/paystack_flutter.dart';
 import 'package:paystack_flutter/paystack.dart';
-import 'package:paystack_flutter/payment_sheet.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,58 +16,68 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _paymentSheet = PaymentSheet();
-  final _paystackFlutterPlugin = PaystackFlutter();
+  String _platformVersion = "Unknown";
+  String _paymentReference = "";
+  String _publicKey = "pk_test_xxxxxx";
+  String _accessCode = "fhnvmojgrpcdp98";
+  final _paystack = Paystack();
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-
-    Paystack()
-      // .setPublicKey("pk_test_xxxx")
-      .enableLogging(true)
-      .build();
+    // initPlatformState();
+    initialize(_publicKey);
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion = await _paystackFlutterPlugin.getPlatformVersion() ??
-          'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+  // Future<void> initPlatformState() async {
+  //   String platformVersion;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   // We also handle the message potentially returning null.
+  //   try {
+  //     platformVersion = await _paystack.getPlatformVersion() ??
+  //         'Unknown platform version';
+  //   } on PlatformException {
+  //     platformVersion = 'Failed to get platform version.';
+  //   }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
+  //   // If the widget was removed from the tree while the asynchronous platform
+  //   // message was in flight, we want to discard the reply rather than calling
+  //   // setState to update our non-existent appearance.
+  //   if (!mounted) return;
 
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
+  //   setState(() {
+  //     _platformVersion = platformVersion;
+  //   });
+  // }
 
-  Future<void> launchPaystack() async {
+  Future<void> initialize(String publicKey) async {
     String response;
     try {
-      response =
-          await _paymentSheet.launch("access_codes") ?? "Cannot launch";
+      response = await _paystack.initialize(publicKey, true) ??
+          "Cannot init";
     } on PlatformException {
-      response = 'Failed to launch SDK.';
+      response = 'Failed to set up SDK.';
     }
 
     print(response);
   }
 
-  // void _triggerMethodChannel() {
-  //   launchPaystack();
-  // }
+  Future<void> launch() async {
+    String response;
+    try {
+      response = await _paystack.launch(_accessCode) 
+        ?? "Cannot launch";
+    } on PlatformException {
+      response = 'Failed to launch SDK.';
+    }
+
+    print(response);
+    
+    setState(() {
+      _paymentReference = response;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +90,8 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  onPressed: launchPaystack,
+                  onPressed: launch,
                   child: const Text('Make Payment')),
-              const SizedBox(width: 16),
-              Text('Running on: $_platformVersion\n'),
             ],
           )),
     );

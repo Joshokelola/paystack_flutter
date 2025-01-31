@@ -1,6 +1,5 @@
 package com.paystack.paystack_flutter
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.paystack.android.core.Paystack
@@ -21,7 +20,7 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   private lateinit var paymentSheet: PaymentSheet
   private var activity: FlutterFragmentActivity? = null
 
-  private fun initializePaystack(publicKey: String, enableLogging: Boolean) {
+  private fun initialize(publicKey: String, enableLogging: Boolean) {
     Paystack
       .builder()
       .setPublicKey(publicKey)
@@ -55,9 +54,8 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   // TODO: Return object in result as opposed to String
   override fun onMethodCall(call: MethodCall, result: Result) {
     when (call.method) {
-      "getPlatformVersion" -> result.success("Android ${android.os.Build.VERSION.RELEASE}")
-      "build" -> {
-        initializePaystack(
+      "initialize" -> {
+        initialize(
           call.argument("publicKey") ?: "",
           call.argument("enableLogging") ?: false)
         result.success("Initiated")
@@ -76,12 +74,10 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity as FlutterFragmentActivity
-    Log.d("ACTIVITY: ", "Attached")
     (binding.lifecycle as HiddenLifecycleReference)
       .lifecycle
       .addObserver(LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_CREATE) {
-          Log.d("OBSERVER: ", "In observer")
           val activity = requireNotNull(activity)
           paymentSheet = PaymentSheet(activity, ::paymentComplete)
         }

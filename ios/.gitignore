@@ -7,6 +7,9 @@
 *.swp
 profile
 
+/paystack_flutter/.build/
+/paystack_flutter/.swiftpm/
+
 DerivedData/
 build/
 GeneratedPluginRegistrant.h
