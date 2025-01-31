@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
 
     Paystack()
-      .setPublicKey("pk_test_xxxx")
+      // .setPublicKey("pk_test_xxxx")
       .enableLogging(true)
       .build();
   }
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
     String response;
     try {
       response =
-          await _paymentSheet.launch("8lqj4xec1qt96t1") ?? "Cannot launch";
+          await _paymentSheet.launch("access_codes") ?? "Cannot launch";
     } on PlatformException {
       response = 'Failed to launch SDK.';
     }

@@ -17,17 +17,15 @@ class MethodChannelPaystackFlutter extends PaystackFlutterPlatform {
   @override
   Future<String?> build(String publicKey, bool enableLogging) async {
     final response = await methodChannel.invokeMethod<String>(
-      'build', {'publicKey': publicKey, 'enableLogging': enableLogging}
-    );
+        'build', {'publicKey': publicKey, 'enableLogging': enableLogging});
 
     return response;
   }
 
   @override
   Future<String?> launch(String accessCode) async {
-    final response = await methodChannel.invokeMethod<String>(
-      'launch', {'accessCode': accessCode}
-    );
+    final response = await methodChannel
+        .invokeMethod<String>('launch', {'accessCode': accessCode});
 
     return response;
   }
