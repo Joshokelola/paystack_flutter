@@ -16,67 +16,54 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = "Unknown";
   String _paymentReference = "";
-  String _publicKey = "pk_test_xxxxxx";
-  String _accessCode = "fhnvmojgrpcdp98";
+  final _publicKey = "pk_test_xxxxxx";
+  final _accessCode = "2g3pyob7ey9dbtj";
   final _paystack = Paystack();
 
   @override
   void initState() {
     super.initState();
-    // initPlatformState();
     initialize(_publicKey);
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  // Future<void> initPlatformState() async {
-  //   String platformVersion;
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   // We also handle the message potentially returning null.
-  //   try {
-  //     platformVersion = await _paystack.getPlatformVersion() ??
-  //         'Unknown platform version';
-  //   } on PlatformException {
-  //     platformVersion = 'Failed to get platform version.';
-  //   }
-
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted) return;
-
-  //   setState(() {
-  //     _platformVersion = platformVersion;
-  //   });
-  // }
-
   Future<void> initialize(String publicKey) async {
-    String response;
     try {
-      response = await _paystack.initialize(publicKey, true) ??
-          "Cannot init";
-    } on PlatformException {
-      response = 'Failed to set up SDK.';
+      final response = await _paystack.initialize(publicKey, true);
+      print(response);
+    } on PlatformException catch (e) {
+      print(e);
     }
-
-    print(response);
   }
 
   Future<void> launch() async {
-    String response;
+    String reference = "";
     try {
-      response = await _paystack.launch(_accessCode) 
-        ?? "Cannot launch";
-    } on PlatformException {
-      response = 'Failed to launch SDK.';
+      final response = await _paystack.launch(_accessCode);
+      if (response.status) {
+        reference = response.reference;
+        print(reference);
+        // _displayToast(context, reference);
+      } else {
+        print(response.message);
+      }
+    } on PlatformException catch (e) {
+      print(e);
     }
 
-    print(response);
-    
     setState(() {
-      _paymentReference = response;
+      _paymentReference = reference;
     });
+  }
+
+  void _displayToast(BuildContext context, String text) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(label: "SDK", onPressed: scaffold.hideCurrentSnackBar),
+      )
+    );
   }
 
   @override
@@ -90,8 +77,7 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  onPressed: launch,
-                  child: const Text('Make Payment')),
+                  onPressed: launch, child: const Text('Make Payment')),
             ],
           )),
     );

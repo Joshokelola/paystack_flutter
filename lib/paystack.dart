@@ -1,14 +1,14 @@
 import 'paystack_flutter_platform_interface.dart';
+import 'models.dart';
 
-// TODO: Handle responses
-// TODO: Consider exposing with builder pattern
+
 class Paystack {
-
-  Future<String?> initialize(String publicKey, bool enableLogging) {
-    return PaystackFlutterPlatform.instance.initialize(publicKey, enableLogging);
+  Future<bool> initialize(String publicKey, bool enableLogging) {
+    return PaystackFlutterPlatform.instance
+        .initialize(publicKey, enableLogging);
   }
 
-  Future<String?> launch(String accessCode) {
+  Future<TransactionResponse> launch(String accessCode) {
     return PaystackFlutterPlatform.instance.launch(accessCode);
   }
 }

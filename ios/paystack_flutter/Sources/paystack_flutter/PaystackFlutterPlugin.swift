@@ -23,7 +23,8 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
                                     details: nil))
                 return
             }
-            initialize(publicKey: publicKey)
+            let logging = args["enableLogging"] as? Bool ?? false
+            initialize(publicKey: publicKey, logging: logging)
         case "launch":
             guard let args = call.arguments as? [String: Any],
                 let accessCode = args["accessCode"] as? String else {
@@ -38,13 +39,18 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
         }
     }
 
-    private func initialize(publicKey: String) {
+    private func initialize(publicKey: String, logging: Bool) {
         do {
-            paystack = try PaystackBuilder
+            let instance = PaystackBuilder
                 .newInstance
                 .setKey(publicKey)
-                .build()
-            result?("true")
+
+            if logging {
+                instance.enableLogging()
+            }
+            
+            paystack = try instance.build()
+            result?(true)
         } catch {
             result?(FlutterError(code: "INITIALIZATION_ERROR",
                                  message: error.localizedDescription,
@@ -86,17 +92,22 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
        switch (result) {
          case .completed(let details):
            self.result?([
-                "status": "success",
+                "status": true,
+                "message": "Transaction successful",
                 "reference": details.reference
            ])
          case .cancelled:
            self.result?([
-                "status": "cancelled"
+                "status": false,
+                "message": "Transaction cancelled",
+                "reference": ""
            ])
          case .error(error: let error, reference: let reference):
-           self.result?(FlutterError(code: "TRANSACTION_ERROR",
-                                     message: error.message,
-                                     details: ["reference": reference ?? ""]))
+           self.result?([
+                "status": false,
+                "message": error.message,
+                "reference": ""
+           ])
        }
      }
 }

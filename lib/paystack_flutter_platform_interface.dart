@@ -1,6 +1,7 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'paystack_flutter_method_channel.dart';
+import 'models.dart';
 
 abstract class PaystackFlutterPlatform extends PlatformInterface {
   PaystackFlutterPlatform() : super(token: _token);
@@ -14,11 +15,11 @@ abstract class PaystackFlutterPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> initialize(String publicKey, bool enableLogging) {
+  Future<bool> initialize(String publicKey, bool enableLogging) {
     throw UnimplementedError('build() has not been implemented');
   }
 
-  Future<String?> launch(String accessCode) {
+  Future<TransactionResponse> launch(String accessCode) {
     throw UnimplementedError('launch() has not been implemented');
   }
 }
