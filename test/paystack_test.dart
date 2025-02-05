@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:paystack_flutter/paystack_flutter.dart';
 import 'package:paystack_flutter/payment_sheet.dart';
-import 'package:paystack_flutter/paystack_flutter_platform_interface.dart';
-import 'package:paystack_flutter/paystack_flutter_method_channel.dart';
+import 'package:paystack_flutter/src/paystack_flutter_platform_interface.dart';
+import 'package:paystack_flutter/src/paystack_flutter_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockPaystackFlutterPlatform

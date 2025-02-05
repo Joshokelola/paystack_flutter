@@ -26,6 +26,7 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     channel.setMethodCallHandler(this)
   }
 
+  // TODO: Change error codes to numbers and provide documentation for it
   override fun onMethodCall(call: MethodCall, result: Result) {
     when (call.method) {
       "initialize" -> {
