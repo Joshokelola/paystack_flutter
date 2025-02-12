@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:paystack_flutter/paystack.dart';
@@ -30,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> initialize(String publicKey) async {
     try {
       final response = await _paystack.initialize(publicKey, true);
-      print(response);
+      log(response as String);
     } on PlatformException catch (e) {
       print(e);
     }

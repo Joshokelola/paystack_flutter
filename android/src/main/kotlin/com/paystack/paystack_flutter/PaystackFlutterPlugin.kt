@@ -19,14 +19,16 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   private lateinit var channel : MethodChannel
   private lateinit var paymentSheet: PaymentSheet
   private var activity: FlutterFragmentActivity? = null
-  private var pendingResult: Result? = null
+  private lateinit var pendingResult: Result
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "com.paystack.flutter")
     channel.setMethodCallHandler(this)
   }
 
+  // TODO: Change error codes to numbers and provide documentation for it
   override fun onMethodCall(call: MethodCall, result: Result) {
+    pendingResult = result
     when (call.method) {
       "initialize" -> {
         val publicKey = call.argument<String>("publicKey")
@@ -56,53 +58,55 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         .setPublicKey(publicKey)
         .setLoggingEnabled(enableLogging)
         .build()
-      pendingResult?.success(true)
+      pendingResult.success(true)
     } catch (e: Exception) {
-      pendingResult?.error("INITIALIZATION_ERROR", e.message, null)
+      pendingResult.error("INITIALIZATION_ERROR", e.message, null)
     }
+
+//    pendingResult = null
   }
 
   private fun launch(accessCode: String) {
     if (activity == null) {
-      pendingResult?.error("NO_ACTIVITY", "Activity is not available", null)
+      pendingResult.error("NO_ACTIVITY", "Activity is not available", null)
       return
     }
 
     try {
       paymentSheet.launch(accessCode)
     } catch (e: Exception) {
-      pendingResult?.error("LAUNCH_ERROR", e.message, null)
+      pendingResult.error("LAUNCH_ERROR", e.message, null)
       return
     }
 
-    pendingResult = null
+//    pendingResult = null
   }
 
   private fun paymentComplete(paymentSheetResult: PaymentSheetResult) {
     when (paymentSheetResult) {
       is PaymentSheetResult.Completed -> {
-        pendingResult?.success(mapOf(
+        pendingResult.success(mapOf(
           "status" to true,
           "message" to "Transaction successful",
           "reference" to paymentSheetResult.paymentCompletionDetails.reference
         ))
       }
       is PaymentSheetResult.Cancelled -> {
-        pendingResult?.success(mapOf(
+        pendingResult.success(mapOf(
           "status" to false,
           "message" to "Transaction cancelled",
           "reference" to ""
         ))
       }
       is PaymentSheetResult.Failed -> {
-        pendingResult?.success(mapOf(
+        pendingResult.success(mapOf(
           "status" to "failed",
           "message" to paymentSheetResult.error.message,
           "reference" to ""
         ))
       }
     }
-    pendingResult = null
+//    pendingResult = null
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

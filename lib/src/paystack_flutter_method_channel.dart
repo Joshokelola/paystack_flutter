@@ -11,35 +11,30 @@ class MethodChannelPaystackFlutter extends PaystackFlutterPlatform {
   @override
   Future<bool> initialize(String publicKey, bool enableLogging) async {
     try {
-      final response = await methodChannel.invokeMethod<String>('initialize', {
-        'publicKey': publicKey, 
-        'enableLogging': enableLogging
-      });
+      final response = await methodChannel.invokeMethod<bool>('initialize',
+          {'publicKey': publicKey, 'enableLogging': enableLogging});
 
-      return response as bool;
+      return response!;
     } on PlatformException catch (e) {
       throw PaystackException(
-        message: e.message ?? 'Failed to initialize Paystack', 
-        code: e.code,
-        details: e.details
-      );
+          message: e.message ?? 'Failed to initialize Paystack',
+          code: e.code,
+          details: e.details);
     }
   }
 
   @override
   Future<TransactionResponse> launch(String accessCode) async {
     try {
-      final response = await methodChannel.invokeMethod<String>('launch', {
-        'accessCode': accessCode
-      });
+      final response = await methodChannel
+          .invokeMethod<Map<dynamic, dynamic>>('launch', {'accessCode': accessCode});
 
       return TransactionResponse.fromMap(response as Map<dynamic, dynamic>);
     } on PlatformException catch (e) {
       throw PaystackException(
-        message: e.message ?? 'Transaction Failed', 
-        code: e.code,
-        details: e.details
-      );
+          message: e.message ?? 'Transaction Failed',
+          code: e.code,
+          details: e.details);
     }
   }
 }

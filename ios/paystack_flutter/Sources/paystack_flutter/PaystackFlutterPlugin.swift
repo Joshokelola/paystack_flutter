@@ -14,6 +14,7 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        self.result = result
         switch call.method {
         case "initialize":
             guard let args = call.arguments as? [String: Any],
@@ -50,9 +51,9 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
             }
             
             paystack = try instance.build()
-            result?(true)
+            self.result?(true)
         } catch {
-            result?(FlutterError(code: "INITIALIZATION_ERROR",
+            self.result?(FlutterError(code: "INITIALIZATION_ERROR",
                                  message: error.localizedDescription,
                                  details: nil))
         }
@@ -60,21 +61,21 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
     
     private func launch(accessCode: String) {
         guard let paystack = paystack else {
-            result?(FlutterError(code: "NOT_INITIALIZED",
+            self.result?(FlutterError(code: "NOT_INITIALIZED",
                                  message: "Paystack not initialized",
                                 details: nil))
             return
         }
         
         guard #available(iOS 14.0, *) else {
-            result?(FlutterError(code: "UNSUPPORTED_VERSION",
+            self.result?(FlutterError(code: "UNSUPPORTED_VERSION",
                                  message: "Paystack UI requires iOS 14.0 or later",
                                 details: nil))
             return
         }
         
         guard let viewController = UIApplication.shared.keyWindow?.rootViewController else {
-            result?(FlutterError(code: "NO_VIEW_CONTROLLER",
+            self.result?(FlutterError(code: "NO_VIEW_CONTROLLER",
                                  message: "Unable to present payment UI",
                                 details: nil))
             return
@@ -88,8 +89,8 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
         })
     }
     
-    private func paymentDone(_ result: TransactionResult) {
-       switch (result) {
+    private func paymentDone(_ transactionResult: TransactionResult) {
+       switch (transactionResult) {
          case .completed(let details):
            self.result?([
                 "status": true,
