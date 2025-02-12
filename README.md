@@ -7,7 +7,8 @@ Paystack Flutter SDK builds upon the recent patterns in the Android and iOS, thu
 - Android 6.0 (API level 23) and above
 - iOS 13 and above
 
-> [! Android Gotcha]
+> [!IMPORTANT]
+>
 > Flutter (3.3.0 below, at the moment) extends the `FlutterActivity` as the base class for Android. The `FlutterActivity` doesn't have the `ComponentActivity`, a compulsory necessity for loading the payment views with the SDK, in its ancestral tree. To fix this, change the `FlutterActivity` to `FlutterFragmentActivity` in the `MainActivity` in the `android` folder of your project.
 
 ## Getting Started
