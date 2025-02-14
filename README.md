@@ -1,11 +1,19 @@
-# paystack_flutter
+# Paystack Flutter SDK
 
 A [Paystack](https://paystack.com) plugin for accepting payments in your Flutter application.
 
-## Minimum Requirement
+## Support 
+| Android |   iOS   |  MacOS  |   Web   |  Linux  | Windows |
+|  :---:  |  :---:  |  :---:  |  :---:  |  :---:  |  :---:  |
+| &check; | &check; | &cross; | &cross; | &cross; | &cross; |
+
+## Requirements
 Paystack Flutter SDK builds upon the recent patterns in the Android and iOS, thus your app should target:
-- Android 6.0 (API level 23) and above
-- iOS 13 and above
+- Flutter >= 3.3.0
+- iOS >= 13
+- Android 
+  - Minimum SDK: 23
+  - Compile SDK: 34
 
 > [!IMPORTANT]
 >
@@ -58,8 +66,5 @@ final _paystack = Paystack();
     });
   }
 ```
-
-## License
-WIP
 
 
