@@ -19,7 +19,7 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
         case "initialize":
             guard let args = call.arguments as? [String: Any],
                 let publicKey = args["publicKey"] as? String else {
-                result(FlutterError(code: "INVALID_ARGUMENTS",
+                result(FlutterError(code: "INVALID_ARGUMENT",
                                     message: "Missing public key",
                                     details: nil))
                 return
@@ -29,7 +29,7 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
         case "launch":
             guard let args = call.arguments as? [String: Any],
                 let accessCode = args["accessCode"] as? String else {
-                result(FlutterError(code: "INVALID_ARGUMENTS",
+                result(FlutterError(code: "INVALID_ARGUMENT",
                                     message: "Missing access code",
                                     details: nil))
                 return
@@ -61,7 +61,7 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
     
     private func launch(accessCode: String) {
         guard let paystack = paystack else {
-            self.result?(FlutterError(code: "NOT_INITIALIZED",
+            self.result?(FlutterError(code: "INITIALIZATION_ERROR",
                                  message: "Paystack not initialized",
                                 details: nil))
             return
@@ -75,8 +75,8 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
         }
         
         guard let viewController = UIApplication.shared.keyWindow?.rootViewController else {
-            self.result?(FlutterError(code: "NO_VIEW_CONTROLLER",
-                                 message: "Unable to present payment UI",
+            self.result?(FlutterError(code: "MISSING_VIEW",
+                                 message: "View controller not found to present payment UI",
                                 details: nil))
             return
         }
@@ -93,19 +93,19 @@ public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
        switch (transactionResult) {
          case .completed(let details):
            self.result?([
-                "status": true,
+                "status": "success",
                 "message": "Transaction successful",
                 "reference": details.reference
            ])
          case .cancelled:
            self.result?([
-                "status": false,
+                "status": "cancelled",
                 "message": "Transaction cancelled",
                 "reference": ""
            ])
          case .error(error: let error, reference: let reference):
            self.result?([
-                "status": false,
+                "status": "failed",
                 "message": error.message,
                 "reference": ""
            ])
