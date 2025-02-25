@@ -67,4 +67,32 @@ final _paystack = Paystack();
   }
 ```
 
+## Handling responses
+The SDK returns two categories of responses:
+- **Transaction**: This returned when you've successfully intergated the SDK and able to get the payment UI. This response 
+is tied to the transaction lifecylce and has the following model:
 
+  | Parameter |  Type  | Description |
+  |   :---   |  :---: |    :---    |
+  | `status` | String | Indicates the state of the transaction. Possible values are: `success`, `cancelled`, `failed` |
+  | `message` | String | This is a short detail about the status of the transaction |
+  | `reference` | String | This is a unique identifier used to manage post-payment processes. It is only returned when the `status` is `success` |
+
+- **Exception**: Exceptions are thrown during your integration process. There are mostly issues surronding the development process. Exceptions make use of the platform-specific `FlutterError` model which has the following parameters:
+following model:
+  | Parameter |  Type  | Description |
+  |   :---   |  :---: |    :---    |
+  | `code` | String | This indicates the category of error |
+  | `message` | String | This is a short description of the error |
+  | `details` | String | This current returns `nil`. In a future update, we can use it to provide details about fixing the error |
+
+
+The following are the error codes that can be returned when an exception occurs:
+
+  | Error Code | Description |
+  |    :---    |    :---     |
+  | `INVALID_ARGUMENT` | This occurs when you aren't passing the required paramter(s) (public key) to set up the SDK |
+  | `INITIALIZATION_ERROR` | This occurs when the SDK cannot be initialized with the parameters passed |
+  | `UNSUPPORTED_VERSION` | This occurs when your projects doesn't conform to the SDK requirements |
+  | `MISSING_VIEW` | This occur when the SDK cannot find a view controller (iOS) or Activity (Android) to attach to |
+  | `LAUNCH_ERROR` | This occurs when the payment UI cannot be loaded |

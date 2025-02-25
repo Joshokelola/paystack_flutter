@@ -1,5 +1,5 @@
 class TransactionResponse {
-  final bool status;
+  final String status;
   final String message;
   final String reference;
 
@@ -11,7 +11,7 @@ class TransactionResponse {
 
   factory TransactionResponse.fromMap(Map<dynamic, dynamic> map) {
     return TransactionResponse(
-      status: map['status'] as bool,
+      status: map['status'] as String,
       message: map['message'] as String,
       reference: map['reference'] as String,
     );

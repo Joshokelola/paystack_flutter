@@ -17,9 +17,10 @@ class MethodChannelPaystackFlutter extends PaystackFlutterPlatform {
       return response!;
     } on PlatformException catch (e) {
       throw PaystackException(
-          message: e.message ?? 'Failed to initialize Paystack',
+          message: e.message!,
           code: e.code,
-          details: e.details);
+          details: e.details
+        );
     }
   }
 
@@ -32,9 +33,10 @@ class MethodChannelPaystackFlutter extends PaystackFlutterPlatform {
       return TransactionResponse.fromMap(response as Map<dynamic, dynamic>);
     } on PlatformException catch (e) {
       throw PaystackException(
-          message: e.message ?? 'Transaction Failed',
+          message: e.message!,
           code: e.code,
-          details: e.details);
+          details: e.details
+        );
     }
   }
 }

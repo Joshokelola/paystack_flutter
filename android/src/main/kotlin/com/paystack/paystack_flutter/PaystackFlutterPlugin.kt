@@ -26,7 +26,6 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     channel.setMethodCallHandler(this)
   }
 
-  // TODO: Change error codes to numbers and provide documentation for it
   override fun onMethodCall(call: MethodCall, result: Result) {
     pendingResult = result
     when (call.method) {
@@ -34,7 +33,11 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         val publicKey = call.argument<String>("publicKey")
         val enableLogging = call.argument<Boolean>("enableLogging") ?: false
         if (publicKey.isNullOrEmpty()) {
-          result.error("INVALID_ARGUMENTS", "Missing public key", null)
+          result.error(
+            "INVALID_ARGUMENT",
+            "Missing public key",
+            null
+          )
           return
         }
         initialize(publicKey, enableLogging)
@@ -42,7 +45,11 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "launch" -> {
         val accessCode = call.argument<String>("accessCode")
         if(accessCode.isNullOrEmpty()) {
-          result.error("INVALID_ARGUMENTS", "Missing access code", null)
+          result.error(
+            "INVALID_ARGUMENT",
+            "Missing access code",
+            null
+          )
           return
         }
         launch(accessCode)
@@ -60,15 +67,21 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         .build()
       pendingResult.success(true)
     } catch (e: Exception) {
-      pendingResult.error("INITIALIZATION_ERROR", e.message, null)
+      pendingResult.error(
+        "INITIALIZATION_ERROR",
+        e.message,
+        null
+      )
     }
-
-//    pendingResult = null
   }
 
   private fun launch(accessCode: String) {
     if (activity == null) {
-      pendingResult.error("NO_ACTIVITY", "Activity is not available", null)
+      pendingResult.error(
+        "MISSING_VIEW",
+        "Activity is not found to present payment UI",
+        null
+      )
       return
     }
 
@@ -78,22 +91,20 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       pendingResult.error("LAUNCH_ERROR", e.message, null)
       return
     }
-
-//    pendingResult = null
   }
 
   private fun paymentComplete(paymentSheetResult: PaymentSheetResult) {
     when (paymentSheetResult) {
       is PaymentSheetResult.Completed -> {
         pendingResult.success(mapOf(
-          "status" to true,
+          "status" to "success",
           "message" to "Transaction successful",
           "reference" to paymentSheetResult.paymentCompletionDetails.reference
         ))
       }
       is PaymentSheetResult.Cancelled -> {
         pendingResult.success(mapOf(
-          "status" to false,
+          "status" to "cancelled",
           "message" to "Transaction cancelled",
           "reference" to ""
         ))
@@ -106,7 +117,6 @@ class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         ))
       }
     }
-//    pendingResult = null
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
