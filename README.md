@@ -26,7 +26,7 @@ flutter pub get paystack_flutter_sdk
 ```
 - Import the paystack_flutter into your `.dart` file
 ```dart
-import 'package:paystack_flutter/paystack.dart';
+import 'package:paystack_flutter_sdk/paystack_flutter_sdk.dart';
 ```
 - Use the plugin
 ```dart
