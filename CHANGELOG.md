@@ -1,4 +1,4 @@
-## 0.0.1
+## 0.0.1-alpha.1
 
 * Add support for Android native views
 * Add support for iOS native views
