@@ -22,7 +22,7 @@ Paystack Flutter SDK builds upon the recent patterns in the Android and iOS, thu
 ## Getting Started
 - Install the dependency in your project
 ```sh
-flutter pub get link_coming_soon
+flutter pub get paystack_sdk
 ```
 - Import the paystack_flutter into your `.dart` file
 ```dart

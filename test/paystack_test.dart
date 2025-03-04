@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:paystack_flutter/src/models.dart';
-import 'package:paystack_flutter/src/paystack_flutter_platform_interface.dart';
-import 'package:paystack_flutter/src/paystack_flutter_method_channel.dart';
+import 'package:paystack_flutter_sdk/src/models.dart';
+import 'package:paystack_flutter_sdk/src/paystack_platform_interface.dart';
+import 'package:paystack_flutter_sdk/src/paystack_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockPaystackFlutterPlatform
     with MockPlatformInterfaceMixin
-    implements PaystackFlutterPlatform {
+    implements PaystackSDKPlatform {
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 
@@ -29,17 +29,17 @@ class MockPaystackFlutterPlatform
 }
 
 void main() {
-  final PaystackFlutterPlatform initialPlatform =
-      PaystackFlutterPlatform.instance;
+  final PaystackSDKPlatform initialPlatform =
+      PaystackSDKPlatform.instance;
 
-  test('$MethodChannelPaystackFlutter is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelPaystackFlutter>());
+  test('$MethodChannelPaystackSDK is the default instance', () {
+    expect(initialPlatform, isInstanceOf<MethodChannelPaystackSDK>());
   });
 
   test('getPlatformVersion', () async {
     // PaystackFlutter paystackFlutterPlugin = PaystackFlutter();
     MockPaystackFlutterPlatform fakePlatform = MockPaystackFlutterPlatform();
-    PaystackFlutterPlatform.instance = fakePlatform;
+    PaystackSDKPlatform.instance = fakePlatform;
 
     // expect(await paystackFlutterPlugin.getPlatformVersion(), '42');
   });
@@ -49,7 +49,7 @@ void main() {
   test('launch', () async {
     // PaymentSheet paymentSheet = PaymentSheet();
     MockPaystackFlutterPlatform fakePlatform = MockPaystackFlutterPlatform();
-    PaystackFlutterPlatform.instance = fakePlatform;
+    PaystackSDKPlatform.instance = fakePlatform;
 
     // expect(await paymentSheet.launch("accessCode"), "Launched");
   });

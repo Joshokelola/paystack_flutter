@@ -1,4 +1,4 @@
-package com.paystack.paystack_flutter
+package com.paystack.paystack_sdk
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -15,7 +15,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-class PaystackFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
+class PaystackSDKPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   private lateinit var channel : MethodChannel
   private lateinit var paymentSheet: PaymentSheet
   private var activity: FlutterFragmentActivity? = null

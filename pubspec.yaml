@@ -1,6 +1,6 @@
-name: paystack_flutter
+name: paystack_flutter_sdk
 description: "Paystack Flutter SDK."
-version: 0.0.1
+version: 0.0.1-alpha.1
 homepage: https://github.com/PaystackOSS/paystack_flutter
 
 environment:
@@ -22,7 +22,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.paystack.paystack_flutter
-        pluginClass: PaystackFlutterPlugin
+        package: com.paystack.paystack_sdk
+        pluginClass: PaystackSDKPlugin
       ios:
-        pluginClass: PaystackFlutterPlugin
+        pluginClass: PaystackSDKPlugin

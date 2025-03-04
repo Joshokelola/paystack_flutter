@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:flutter/services.dart';
 import 'dart:developer';
 
-import 'package:flutter/services.dart';
-import 'package:paystack_flutter/paystack.dart';
+import 'package:paystack_flutter_sdk/paystack.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +16,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _paymentReference = "";
+  String _reference = "";
   final _publicKey = "pk_test_xxxxxx";
-  final _accessCode = "2g3pyob7ey9dbtj";
+  final _accessCode = "2ksqdeqqlbpqg24";
   final _paystack = Paystack();
 
   @override
@@ -28,43 +27,38 @@ class _MyAppState extends State<MyApp> {
     initialize(_publicKey);
   }
 
-  Future<void> initialize(String publicKey) async {
-    try {
+  initialize(String publicKey) async {
+        try {
       final response = await _paystack.initialize(publicKey, true);
-      log(response as String);
+      if (response) {
+        log("Sucessfully initialised the SDK");
+      } else {
+        log("Unable to initialise the SDK");
+      }
     } on PlatformException catch (e) {
-      print(e);
+      log(e.message!);
     }
   }
 
-  Future<void> launch() async {
+  launch() async {
     String reference = "";
     try {
       final response = await _paystack.launch(_accessCode);
-      if (response.status) {
+      if (response.status == "success") {
         reference = response.reference;
-        print(reference);
-        // _displayToast(context, reference);
+        log(reference);
+      } else if(response.status == "cancelled") {
+        log(response.message);
       } else {
-        print(response.message);
+        log(response.message);
       }
     } on PlatformException catch (e) {
-      print(e);
+      log(e.message!);
     }
 
     setState(() {
-      _paymentReference = reference;
+      _reference = reference;
     });
-  }
-
-  void _displayToast(BuildContext context, String text) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: Text(text),
-        action: SnackBarAction(label: "SDK", onPressed: scaffold.hideCurrentSnackBar),
-      )
-    );
   }
 
   @override
@@ -72,15 +66,22 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('Paystack Flutter'),
+            title: const Text('Paystack SDK'),
           ),
-          body: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: launch, child: const Text('Make Payment')),
-            ],
-          )),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: launch, child: const Text('Make Payment')),
+                Text(
+                  "Ref: $_reference",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )
+              ],
+            ),
+          ),
+          )
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'paystack_flutter_platform_interface.dart';
+import 'paystack_platform_interface.dart';
 import 'models.dart';
 
-class MethodChannelPaystackFlutter extends PaystackFlutterPlatform {
+class MethodChannelPaystackSDK extends PaystackSDKPlatform {
   @visibleForTesting
   final methodChannel = const MethodChannel('com.paystack.flutter');
 

@@ -1,4 +1,4 @@
-package com.paystack.paystack_flutter_example
+package com.paystack.paystack_sdk_example
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

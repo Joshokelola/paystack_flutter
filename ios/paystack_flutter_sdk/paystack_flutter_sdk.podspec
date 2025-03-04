@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
-  s.name             = 'paystack_flutter'
+  s.name             = 'paystack_flutter_sdk'
   s.version          = '0.0.1'
-  s.summary          = 'A Paystack Flutter plugin for accepting payments.'
+  s.summary          = 'A Paystack Flutter SDK for accepting payments.'
   s.description      = <<-DESC
-A Paystack Flutter plugin for accepting payments.
+A Paystack Flutter SDK for accepting payments.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
@@ -11,7 +11,7 @@ A Paystack Flutter plugin for accepting payments.
   s.source           = { :path => '.' }
   # s.source_files = 'Classes/**/*'
   s.platform = :ios, '14.0'
-  s.source_files = 'sample_sdk/Sources/sample_sdk/**/*.swift'
+  s.source_files = 'paystack_flutter_sdk/Sources/paystack_flutter_sdk/**/*.swift'
   s.dependency 'Flutter'
 
   # Flutter.framework does not contain a i386 slice.

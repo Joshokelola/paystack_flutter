@@ -3,13 +3,13 @@ import UIKit
 import PaystackCore
 import PaystackUI
 
-public class PaystackFlutterPlugin: NSObject, FlutterPlugin {
+public class PaystackSDKPlugin: NSObject, FlutterPlugin {
     private var paystack: Paystack?
     private var result: FlutterResult?
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "com.paystack.flutter", binaryMessenger: registrar.messenger())
-        let instance = PaystackFlutterPlugin()
+        let instance = PaystackSDKPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     

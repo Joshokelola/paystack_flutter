@@ -162,7 +162,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
-  paystack_flutter:
+  paystack_flutter_sdk:
     dependency: "direct main"
     description:
       path: ".."
