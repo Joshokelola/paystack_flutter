@@ -3,11 +3,8 @@ class TransactionResponse {
   final String message;
   final String reference;
 
-  TransactionResponse({
-    required this.status,
-    required this.message,
-    required this.reference
-  });
+  TransactionResponse(
+      {required this.status, required this.message, required this.reference});
 
   factory TransactionResponse.fromMap(Map<dynamic, dynamic> map) {
     return TransactionResponse(
