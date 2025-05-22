@@ -24,6 +24,8 @@ dev_dependencies:
   test: ^1.25.2
 
 flutter:
+  disable-swift-package-manager: true
+  
   plugin:
     platforms:
       android:
